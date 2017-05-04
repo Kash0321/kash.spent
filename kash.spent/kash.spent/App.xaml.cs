@@ -1,4 +1,5 @@
-﻿using System;
+﻿using kash.spent.Expenses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace kash.spent
         {
             InitializeComponent();
 
-            MainPage = new kash.spent.Expenses.ExpensesView();
+            MainPage = new NavigationPage(new ExpensesView());
         }
 
         protected override void OnStart()

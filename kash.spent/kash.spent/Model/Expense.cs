@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kash.spent.Expenses
+namespace kash.spent.Model
 {
     /// <summary>
     /// Representa un gasto concreto que justificar o registrar

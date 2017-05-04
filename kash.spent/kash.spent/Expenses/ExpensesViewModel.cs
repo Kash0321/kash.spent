@@ -1,4 +1,6 @@
-﻿using System;
+﻿using kash.spent.ExpenseDetail;
+using kash.spent.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace kash.spent.Expenses
     /// </summary>
     public class ExpensesViewModel : BaseViewModel
     {
+        ExpensesView _expensesView;
+
         /// <summary>
         /// Colección de gastos gestionados
         /// </summary>
@@ -26,11 +30,32 @@ namespace kash.spent.Expenses
         /// <summary>
         /// Inicializa una instancia de <see cref="ExpensesViewModel"/>
         /// </summary>
-        public ExpensesViewModel()
+        public ExpensesViewModel(ExpensesView expensesView)
         {
+            _expensesView = expensesView;
             Expenses = new ObservableCollection<Expense>();
             GetExpensesCommand = new Command(async () => await GetExpensesAsync());
             GetExpensesAsync();
+        }
+
+        Expense selectedExpenseItem;
+        /// <summary>
+        /// Gasto seleccionado en la UI
+        /// </summary>
+        public Expense SelectedExpenseItem
+        {
+            get { return selectedExpenseItem; }
+            set
+            {
+                selectedExpenseItem = value;
+                OnPropertyChanged();
+
+                if (selectedExpenseItem != null)
+                {
+                    _expensesView.Navigation.PushAsync(new ExpenseDetailView(SelectedExpenseItem));
+                    SelectedExpenseItem = null;
+                }
+            }
         }
 
         async Task GetExpensesAsync()

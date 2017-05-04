@@ -16,7 +16,7 @@ namespace kash.spent.Expenses
         {
             InitializeComponent();
 
-            BindingContext = new ExpensesViewModel();
+            BindingContext = new ExpensesViewModel(this);
         }
     }
 }
