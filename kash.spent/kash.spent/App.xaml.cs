@@ -13,7 +13,7 @@ namespace kash.spent
         {
             InitializeComponent();
 
-            MainPage = new kash.spent.MainPage();
+            MainPage = new kash.spent.Expenses.ExpensesView();
         }
 
         protected override void OnStart()
