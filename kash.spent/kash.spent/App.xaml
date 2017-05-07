@@ -4,7 +4,14 @@
              x:Class="kash.spent.App">
 	<Application.Resources>
 
-		<!-- Application resource dictionary -->
+        <ResourceDictionary>
+            <Color x:Key="Primary">#53BA9D</Color>
+            <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+        </ResourceDictionary>
 
-	</Application.Resources>
+    </Application.Resources>
 </Application>

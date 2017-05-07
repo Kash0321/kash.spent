@@ -1,5 +1,7 @@
 ﻿using kash.spent.ExpenseDetail;
 using kash.spent.Model;
+using kash.spent.NewExpense;
+using kash.spent.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,8 +17,6 @@ namespace kash.spent.Expenses
     /// </summary>
     public class ExpensesViewModel : BaseViewModel
     {
-        ExpensesView _expensesView;
-
         /// <summary>
         /// Colección de gastos gestionados
         /// </summary>
@@ -27,15 +27,24 @@ namespace kash.spent.Expenses
         /// </summary>
         public Command GetExpensesCommand { get; set; }
 
+        public Command AddExpenseCommand { get; set; }
+
         /// <summary>
         /// Inicializa una instancia de <see cref="ExpensesViewModel"/>
         /// </summary>
-        public ExpensesViewModel(ExpensesView expensesView)
+        public ExpensesViewModel()
         {
-            _expensesView = expensesView;
             Expenses = new ObservableCollection<Expense>();
             GetExpensesCommand = new Command(async () => await GetExpensesAsync());
+            AddExpenseCommand = new Command(() => AddExpense());
             GetExpensesAsync();
+
+            MessagingCenter.Subscribe<NewExpenseViewModel, Expense>(this, "AddExpense", async (obj, expense) =>
+            {
+                Expenses.Add(expense);
+
+                await DependencyService.Get<IDataService>().AddExpenseAsync(expense);
+            });
         }
 
         Expense selectedExpenseItem;
@@ -52,7 +61,7 @@ namespace kash.spent.Expenses
 
                 if (selectedExpenseItem != null)
                 {
-                    _expensesView.Navigation.PushAsync(new ExpenseDetailView(SelectedExpenseItem));
+                    MessagingCenter.Send(this, "NavigateToDetail", SelectedExpenseItem);
                     SelectedExpenseItem = null;
                 }
             }
@@ -68,27 +77,32 @@ namespace kash.spent.Expenses
             try
             {
                 Expenses.Clear();
-                Expenses.Add(new Expense
+
+                var expenses = await DependencyService.Get<IDataService>().GetExpensesAsync();
+                foreach (var expense in expenses)
                 {
-                    Company = "Walmart",
-                    Description = "Always low prices.",
-                    Amount = "$14.99",
-                    Date = DateTime.Now
-                });
-                Expenses.Add(new Expense
-                {
-                    Company = "Apple",
-                    Description = "New iPhone came out - irresistable.",
-                    Amount = "$999",
-                    Date = DateTime.Now.AddDays(-7)
-                });
-                Expenses.Add(new Expense
-                {
-                    Company = "Amazon",
-                    Description = "Case to protect my new iPhone.",
-                    Amount = "$50",
-                    Date = DateTime.Now.AddDays(-2)
-                });
+                    Expenses.Add(expense);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send(this, "Error", ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        void AddExpense()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            try
+            {
+                MessagingCenter.Send(this, "NavigateToNewExpense", "NewExpenseView");
             }
             catch (Exception ex)
             {

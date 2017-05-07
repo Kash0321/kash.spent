@@ -16,4 +16,7 @@
             </ListView.ItemTemplate>
         </ListView>
     </ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddExpenseCommand}" />
+    </ContentPage.ToolbarItems>
 </ContentPage>
