@@ -3,20 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="kash.spent.Expenses.ExpensesView"
              Title="Expenses">
-    <ContentPage.Content>
-        <ListView ItemsSource="{Binding Expenses}"	
-                IsPullToRefreshEnabled="true"
-	            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-	            RefreshCommand="{Binding GetExpensesCommand}"	
-                SelectedItem="{Binding SelectedExpenseItem, Mode=TwoWay}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Company}" Detail="{Binding Amount}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </ContentPage.Content>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddExpenseCommand}" />
     </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <RelativeLayout x:Name="relativeLayout">
+            <StackLayout>
+                <ListView ItemsSource="{Binding Expenses}"
+					IsPullToRefreshEnabled="true"
+					IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+					RefreshCommand="{Binding GetExpensesCommand}"
+					SelectedItem="{Binding SelectedExpenseItem, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding Company}" Detail="{Binding Amount}" TextColor="{Binding Primary}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+
 </ContentPage>

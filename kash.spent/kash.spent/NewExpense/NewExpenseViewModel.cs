@@ -14,7 +14,7 @@ namespace kash.spent.NewExpense
     {
         public string Company { get; set; }
         public string Description { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
         public string Amount { get; set; }
 
         string receipt;

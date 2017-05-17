@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+#if __ANDROID__
+using Android.Support.Design.Widget;
+using Xamarin.Forms.Platform.Android;
+#endif
+
 namespace kash.spent.Expenses
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -18,6 +23,33 @@ namespace kash.spent.Expenses
         public ExpensesView()
         {
             InitializeComponent();
+
+            #if __ANDROID__
+            ToolbarItems.RemoveAt(0);
+
+            var fab = new FloatingActionButton(Forms.Context)
+            {
+	            UseCompatPadding = true
+            };
+
+            fab.Click += (sender, e) =>
+            {
+	            var viewModel = BindingContext as ExpensesViewModel;
+	            viewModel.AddExpenseCommand.Execute(null);
+            };
+
+            relativeLayout.Children.Add(fab.ToView(), 
+                Constraint.RelativeToParent((parent) =>
+	            {
+		            return parent.Width - 100;
+	            }),
+                Constraint.RelativeToParent((parent) =>
+	            {
+		            return parent.Height - 100;
+	            }),
+                Constraint.Constant(75),
+	            Constraint.Constant(85));
+            #endif
 
             BindingContext = new ExpensesViewModel();
         }
