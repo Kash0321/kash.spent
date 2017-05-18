@@ -1,4 +1,8 @@
-﻿using kash.spent.ExpenseDetail;
+﻿#if __ANDROID__
+using Android.Support.Design.Widget;
+using Xamarin.Forms.Platform.Android;
+#endif
+using kash.spent.ExpenseDetail;
 using kash.spent.Model;
 using kash.spent.NewExpense;
 using System;
@@ -9,11 +13,6 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-#if __ANDROID__
-using Android.Support.Design.Widget;
-using Xamarin.Forms.Platform.Android;
-#endif
 
 namespace kash.spent.Expenses
 {
