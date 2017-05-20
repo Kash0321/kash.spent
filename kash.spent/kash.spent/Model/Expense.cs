@@ -9,7 +9,7 @@ namespace kash.spent.Model
     /// <summary>
     /// Representa un gasto concreto que justificar o registrar
     /// </summary>
-    public class Expense
+    public class Expense : EntityData
     {
         /// <summary>
         /// Empresa a la que justificar el gasto

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: Xamarin.Forms.Dependency(typeof(kash.spent.Services.DataServiceMock))]
 namespace kash.spent.Services
 {
     public class DataServiceMock : IDataService
