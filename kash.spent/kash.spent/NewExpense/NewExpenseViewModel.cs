@@ -18,6 +18,9 @@ namespace kash.spent.NewExpense
         public string Amount { get; set; }
 
         string receipt;
+
+        MediaFile receiptPhoto;
+
         public string Receipt
         {
             get { return receipt; }
@@ -45,6 +48,8 @@ namespace kash.spent.NewExpense
                 }
 
                 Receipt = photo?.Path;
+
+                receiptPhoto = photo;
             }
             catch (Exception ex)
             {
@@ -58,16 +63,30 @@ namespace kash.spent.NewExpense
 
         async Task SaveExpenseAsync()
         {
+
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             try
             {
                 var expense = new Expense
                 {
                     Company = Company,
-			        Description = Description,
-			        Date = DateTime,
-			        Amount = Amount,
-			        Receipt = Receipt
+                    Description = Description,
+                    Date = DateTime,
+                    Amount = Amount
                 };
+
+                var expenseData = new object[]
+                {
+                    expense,
+                    receiptPhoto
+                };
+
+                MessagingCenter.Send(this, "AddExpense", expenseData);
+                MessagingCenter.Send(this, "NavigateBack", "ExpensesView");
 
                 MessagingCenter.Send(this, "AddExpense", expense);
                 MessagingCenter.Send(this, "NavigateBack", "ExpensesView");
@@ -80,6 +99,7 @@ namespace kash.spent.NewExpense
             {
                 IsBusy = false;
             }
+
         }
 
         public Command SaveExpenseCommand { get; set; }
